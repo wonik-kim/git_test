@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<style>
+	
+	div {width : 500px; border : 1px solid black; float:left; margin: 10px;}
+	#div1{width:1000px;}
+
+</style>
+  
+</head>
+
+
+<script>
+
+
+$(function(){
+	 $('#list').on('click', function(e){
+	    $.ajax({
+	    	
+	    	url : '/getMovieJson',
+	    	//url      : 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=2b339894185d7799c8b05f683e9bcea1&targetDt=20120101',
+	    	// data     : {v:'890'},
+	    	dataType : 'json',
+	    	success  : function (data){
+	    		
+	    	    var html = "";
+	    	    
+	    	    var list = data.boxOfficeResult.dailyBoxOfficeList;
+	    	    alert(list);
+	    	    $.each(list, function(index, dailyBoxOffice) {
+	    	    	
+	    	    	console.log(dailyBoxOffice);
+	    	    	
+	    	    	html += '<div>';
+	    	    	html += '<p>movieNm: ' + dailyBoxOffice.movieNm + '</p>';
+	    	    	html += '<p>movieCd: ' + dailyBoxOffice.movieCd + '</p>';
+	    	    	html += '</div>';
+	    	    	
+	    	    	
+	    	    })
+	    		
+	    	    $('#div1').html(html);
+	    	},
+	    	
+	    	error : function(xhr){
+	    		console.log(xhr);
+	    		alert('오류:' + xhr.status);
+	    	}
+	    })	 
+ })
+ 
+ 
+ 
+ 
+ 	 $('#btn2').on('click', function(e){
+	    $.ajax({
+	    	url      : '/getMovieXml',
+	    	// data     : {v:'890'},
+	    	dataType : 'xml',
+	    	success  : function (xml){
+                console.log(xml);
+	    	    alert(xml);
+	    	    var html = '';
+	    	    $(xml).find('dailyBoxOffice').each(function(index){
+	    	    	console.log($(this));
+	    	    	
+	    	    	html += '<div>';
+	    	    	html += '<p>영화이름: ' + $(this).find('movieNm').text() + '</p>';
+	    	    	html += '<p>영화Cd: '   + $(this).find('movieCd').text() + '</p>';
+	    	    	html += '</div>';
+	    	    });
+	    	    
+	    	    $('#div1').html(html);
+	    	},
+	    	
+	    	error : function(xhr){
+	    		console.log(xhr);
+	    		alert('오류:' + xhr.status);
+	    	}
+	    })	 
+ })
+ 
+ 
+ 
+ 
+ 
+ });
+
+</script>  
+
+<body>
+	<h1>이것은 html</h1>
+	<button id = "list">OK</button>
+	<button id = "btn2">OK2</button>
+	<div id = "div1"></div>
+
+</body>
+</html>
